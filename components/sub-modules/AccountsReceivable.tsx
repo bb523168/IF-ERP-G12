@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Search, Filter, Calendar, CheckCircle2, Clock, AlertCircle, RefreshCw } from 'lucide-react';
+import { Search, Filter, Calendar, CheckCircle2, Clock, AlertCircle, RefreshCw, CreditCard } from 'lucide-react';
 import { AccountReceivable } from '../../types';
 
 const INITIAL_AR: AccountReceivable[] = [
@@ -121,5 +121,5 @@ const AccountsReceivable: React.FC = () => {
     </div>
   );
 };
-import { CreditCard } from 'lucide-react';
+
 export default AccountsReceivable;

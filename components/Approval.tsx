@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { CheckCircle2, XCircle, Clock, AlertCircle, FileText, Search, Filter } from 'lucide-react';
+import { CheckCircle2, XCircle, Clock, AlertCircle, FileText, Search, Filter, ChevronRight } from 'lucide-react';
 import { ApprovalRequest } from '../types';
 
 const INITIAL_APPROVALS: ApprovalRequest[] = [
@@ -118,5 +118,5 @@ const Approval: React.FC = () => {
     </div>
   );
 };
-import { ChevronRight } from 'lucide-react';
+
 export default Approval;
