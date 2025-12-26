@@ -49,7 +49,10 @@ const App: React.FC = () => {
     { type: ModuleType.SETTINGS, icon: SettingsIcon, label: '系統設定', roles: ['建築師', '經理', '設計師'] },
   ];
 
-  const visibleItems = navItems.filter(item => currentUser && item.roles.includes(currentUser.role));
+  const visibleItems = navItems.filter(item => {
+    if (!currentUser || !currentUser.role) return false;
+    return (item.roles || []).includes(currentUser.role);
+  });
 
   if (!currentUser) {
     return <Login onLogin={(user) => setCurrentUser(user)} />;
@@ -127,7 +130,7 @@ const App: React.FC = () => {
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 rounded-full">
-              <span className="text-xs font-bold text-slate-500">{currentUser.role}</span>
+              <span className="text-xs font-bold text-slate-500">{currentUser?.role}</span>
               <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
             </div>
             <UserCircle size={32} className="text-indigo-600" />

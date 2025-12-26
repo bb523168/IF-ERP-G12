@@ -8,8 +8,19 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script>
-        // 修復 Vercel/瀏覽器環境缺少 process 導致的白屏問題
-        window.process = { env: { API_KEY: "" } };
+        /**
+         * 修正 Vercel 部署白屏問題
+         * 定義瀏覽器環境中的 process 與 global 變數，防止 ESM 模組因存取不到 Node 全域變數而崩潰
+         */
+        window.global = window;
+        window.process = {
+            env: { 
+                API_KEY: "",
+                NODE_ENV: "production" 
+            },
+            nextTick: (cb) => setTimeout(cb, 0),
+            browser: true
+        };
     </script>
     <style>
         body {
