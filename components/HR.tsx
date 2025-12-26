@@ -3,12 +3,13 @@ import React from 'react';
 import { UserPlus, Mail, Phone, MapPin, Search } from 'lucide-react';
 import { Employee } from '../types';
 
+// Add hireDate to mock data to fix type errors
 const MOCK_EMPLOYEES: Employee[] = [
-  { id: '1', name: '王大明', position: '主持建築師', department: '管理層', status: '在職' },
-  { id: '2', name: '李小美', position: '資深專案經理', department: '專案一部', status: '在職' },
-  { id: '3', name: '張三', position: '設計師', department: '專案二部', status: '請假' },
-  { id: '4', name: '趙四', position: '法務專員', department: '行政室', status: '在職' },
-  { id: '5', name: '陳工程', position: '結構技師', department: '工務組', status: '在職' },
+  { id: '1', name: '王大明', position: '主持建築師', department: '管理層', status: '在職', hireDate: '2010-01-01' },
+  { id: '2', name: '李小美', position: '資深專案經理', department: '專案一部', status: '在職', hireDate: '2015-05-12' },
+  { id: '3', name: '張三', position: '設計師', department: '專案二部', status: '請假', hireDate: '2020-03-20' },
+  { id: '4', name: '趙四', position: '法務專員', department: '行政室', status: '在職', hireDate: '2022-11-01' },
+  { id: '5', name: '陳工程', position: '結構技師', department: '工務組', status: '在職', hireDate: '2021-08-15' },
 ];
 
 const HR: React.FC = () => {

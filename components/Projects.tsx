@@ -3,12 +3,88 @@ import React, { useState } from 'react';
 import { Plus, Filter, MoreVertical, Search, ExternalLink } from 'lucide-react';
 import { Project } from '../types';
 
+// Fixed MOCK_PROJECTS missing properties required by Project interface
 const MOCK_PROJECTS: Project[] = [
-  { id: '1', name: '大安區景觀豪宅案', client: '林先生', status: '設計中', progress: 45, budget: 12000000 },
-  { id: '2', name: '南港商辦大樓', client: '國泰建設', status: '執照申請', progress: 65, budget: 85000000 },
-  { id: '3', name: '台中集合住宅案', client: '興富發', status: '施工中', progress: 30, budget: 150000000 },
-  { id: '4', name: '陽明山別墅改建', client: '陳夫人', status: '已結案', progress: 100, budget: 6500000 },
-  { id: '5', name: '新竹科園廠房增建', client: '台積電', status: '設計中', progress: 15, budget: 45000000 },
+  { 
+    id: '1', 
+    code: '25L-A01', 
+    name: '大安區景觀豪宅案', 
+    client: '林先生', 
+    caseName: '大安區豪宅新建工程', 
+    location: '台北市大安區', 
+    product: 'H2集合住宅', 
+    status: '設計中', 
+    progress: 45, 
+    budget: 12000000,
+    year: 2025,
+    affiliation: '樂果',
+    natures: ['A'],
+    notes: ''
+  },
+  { 
+    id: '2', 
+    code: '25C-AS02', 
+    name: '南港商辦大樓', 
+    client: '國泰建設', 
+    caseName: '南港商辦新建工程', 
+    location: '台北市南港區', 
+    product: 'C1辦公大樓', 
+    status: '執照申請', 
+    progress: 65, 
+    budget: 85000000,
+    year: 2025,
+    affiliation: '成果',
+    natures: ['A', 'S'],
+    notes: ''
+  },
+  { 
+    id: '3', 
+    code: '25-AC03', 
+    name: '台中集合住宅案', 
+    client: '興富發', 
+    caseName: '台中北屯集合住宅案', 
+    location: '台中市北屯區', 
+    product: 'H2集合住宅', 
+    status: '施工中', 
+    progress: 30, 
+    budget: 150000000,
+    year: 2025,
+    affiliation: '如果',
+    natures: ['A', 'C'],
+    notes: ''
+  },
+  { 
+    id: '4', 
+    code: '25-A04', 
+    name: '陽明山別墅改建', 
+    client: '陳夫人', 
+    caseName: '陽明山莊別墅增建', 
+    location: '台北市士林區', 
+    product: 'H2住宅', 
+    status: '已結案', 
+    progress: 100, 
+    budget: 6500000,
+    year: 2025,
+    affiliation: '如果',
+    natures: ['A'],
+    notes: ''
+  },
+  { 
+    id: '5', 
+    code: '25-AE05', 
+    name: '新竹科園廠房增建', 
+    client: '台積電', 
+    caseName: '竹科廠房擴建三期', 
+    location: '新竹市科學園區', 
+    product: 'C1工業廠房', 
+    status: '設計中', 
+    progress: 15, 
+    budget: 45000000,
+    year: 2025,
+    affiliation: '如果',
+    natures: ['A', 'E'],
+    notes: ''
+  },
 ];
 
 const Projects: React.FC = () => {
@@ -20,6 +96,7 @@ const Projects: React.FC = () => {
       case '執照申請': return 'bg-amber-100 text-amber-700';
       case '施工中': return 'bg-purple-100 text-purple-700';
       case '已結案': return 'bg-slate-100 text-slate-700';
+      default: return 'bg-slate-100 text-slate-700';
     }
   };
 
@@ -66,7 +143,7 @@ const Projects: React.FC = () => {
                     {p.name}
                     <ExternalLink size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
-                  <div className="text-xs text-slate-400 mt-1">ID: PRJ-{p.id}2024</div>
+                  <div className="text-xs text-slate-400 mt-1">ID: {p.code}</div>
                 </td>
                 <td className="px-6 py-4 text-slate-600 font-medium">{p.client}</td>
                 <td className="px-6 py-4">
