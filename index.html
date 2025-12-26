@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>如果建築師事務所 - 整合管理系統 (ERP)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+        body { font-family: 'Noto Sans TC', sans-serif; }
+        .sidebar-link.active { @apply bg-blue-700 border-r-4 border-yellow-400; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="flex h-screen overflow-hidden">
+        <!-- 側邊欄 Sidebar -->
+        <aside class="w-64 bg-slate-800 text-white flex-shrink-0 flex flex-col">
+            <div class="p-6 text-center border-b border-slate-700">
+                <h1 class="text-xl font-bold tracking-wider">如果建築師事務所</h1>
+                <p class="text-xs text-slate-400 mt-1">IF Architects ERP</p>
+            </div>
+            <nav class="flex-1 mt-4 overflow-y-auto">
+                <a href="#" onclick="showModule('project')" class="sidebar-link flex items-center px-6 py-3 hover:bg-slate-700 transition">
+                    <i class="fas fa-city w-6"></i> <span>專案業務</span>
+                </a>
+                <a href="#" onclick="showModule('finance')" class="sidebar-link flex items-center px-6 py-3 hover:bg-slate-700 transition">
+                    <i class="fas fa-calculator w-6"></i> <span>財務會計</span>
+                </a>
+                <a href="#" onclick="showModule('contract')" class="sidebar-link flex items-center px-6 py-3 hover:bg-slate-700 transition">
+                    <i class="fas fa-file-signature w-6"></i> <span>合約法務</span>
+                </a>
+                <a href="#" onclick="showModule('hr')" class="sidebar-link flex items-center px-6 py-3 hover:bg-slate-700 transition">
+                    <i class="fas fa-users w-6"></i> <span>人力資源</span>
+                </a>
+                <a href="#" onclick="showModule('admin')" class="sidebar-link flex items-center px-6 py-3 hover:bg-slate-700 transition">
+                    <i class="fas fa-tasks w-6"></i> <span>管理行政</span>
+                </a>
+                <a href="#" onclick="showModule('approval')" class="sidebar-link flex items-center px-6 py-3 hover:bg-slate-700 transition">
+                    <i class="fas fa-pen-fancy w-6"></i> <span>線上簽核</span>
+                </a>
+                <a href="#" onclick="showModule('report')" class="sidebar-link flex items-center px-6 py-3 hover:bg-slate-700 transition">
+                    <i class="fas fa-chart-pie w-6"></i> <span>統計報表</span>
+                </a>
+                <a href="#" onclick="showModule('settings')" class="sidebar-link flex items-center px-6 py-3 hover:bg-slate-700 transition">
+                    <i class="fas fa-cog w-6"></i> <span>系統設定</span>
+                </a>
+            </nav>
+            <div class="p-4 bg-slate-900 text-xs text-center text-slate-500">
+                v1.0.0 Alpha
+            </div>
+        </aside>
+
+        <!-- 主內容區 -->
+        <main class="flex-1 flex flex-col overflow-hidden">
+            <!-- 頂部列 -->
+            <header class="h-16 bg-white shadow-sm flex items-center justify-between px-8">
+                <h2 id="module-title" class="text-xl font-semibold text-gray-700">專案業務管理</h2>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-500">歡迎，管理員</span>
+                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs">AD</div>
+                </div>
+            </header>
+
+            <!-- 內容顯示區 -->
+            <section id="content-area" class="flex-1 overflow-y-auto p-8">
+                
+                <!-- 範例：專案模組 (預設顯示) -->
+                <div id="mod-project" class="module-content">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold">現有建築案場</h3>
+                        <button onclick="openModal('project')" class="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700">
+                            <i class="fas fa-plus mr-2"></i>新增專案
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="project-list">
+                        <!-- 資料會從 Firebase 載入 -->
+                        <div class="p-8 text-center text-gray-400 col-span-full">載入中...</div>
+                    </div>
+                </div>
+
+                <!-- 其他模組佔位符 -->
+                <div id="mod-placeholder" class="module-content hidden">
+                    <div class="bg-white p-20 rounded-lg shadow text-center">
+                        <i class="fas fa-tools text-6xl text-gray-200 mb-4"></i>
+                        <h3 class="text-2xl font-bold text-gray-400">模組建設中</h3>
+                        <p class="text-gray-400">此模組正在與「如果建築師事務所」流程對接中...</p>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+    <!-- 新增專案彈窗 (Modal) -->
+    <div id="modal-project" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg w-full max-w-md p-6">
+            <h3 class="text-xl font-bold mb-4">新增建築專案</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">專案名稱</label>
+                    <input type="text" id="form-name" placeholder="例如：大安區住宅新建工程" class="mt-1 block w-full border border-gray-300 rounded-md p-2 outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">業主</label>
+                    <input type="text" id="form-client" placeholder="例如：如果建設" class="mt-1 block w-full border border-gray-300 rounded-md p-2 outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">預算 (萬元)</label>
+                    <input type="number" id="form-budget" class="mt-1 block w-full border border-gray-300 rounded-md p-2 outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button onclick="closeModal('project')" class="px-4 py-2 text-gray-500 hover:text-gray-700">取消</button>
+                    <button id="save-project" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">儲存資料</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK & 邏輯 -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // 你的 Firebase 配置
+        const firebaseConfig = {
+            apiKey: "AIzaSyBF2GJg46K35jGhS15vLbGKve1wm2xO-5w",
+            authDomain: "if-erp-g1.firebaseapp.com",
+            projectId: "if-erp-g1",
+            storageBucket: "if-erp-g1.firebasestorage.app",
+            messagingSenderId: "565679463634",
+            appId: "1:565679463634:web:cdc43130f9e6b2fcbde10b",
+            measurementId: "G-NEQ187VS9L"
+        };
+
+        // 初始化 Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const analytics = getAnalytics(app);
+
+        // --- 功能邏輯 ---
+
+        // 1. 模組切換
+        window.showModule = function(moduleId) {
+            const titleMap = {
+                'project': '專案業務管理',
+                'finance': '財務會計系統',
+                'contract': '合約法務管理',
+                'hr': '人力資源管理',
+                'admin': '管理行政庶務',
+                'approval': '線上簽核中心',
+                'report': '統計報表分析',
+                'settings': '系統參數設定'
+            };
+            
+            document.getElementById('module-title').innerText = titleMap[moduleId];
+            
+            // 隱藏所有內容
+            document.querySelectorAll('.module-content').forEach(el => el.classList.add('hidden'));
+            
+            // 顯示對應內容 (這裡簡化，除了 project 外都顯示 placeholder)
+            if (moduleId === 'project') {
+                document.getElementById('mod-project').classList.remove('hidden');
+            } else {
+                document.getElementById('mod-placeholder').classList.remove('hidden');
+            }
+        };
+
+        // 2. 彈窗控制
+        window.openModal = (id) => document.getElementById(`modal-${id}`).classList.remove('hidden');
+        window.closeModal = (id) => document.getElementById(`modal-${id}`).classList.add('hidden');
+
+        // 3. Firestore 資料操作 (專案模組)
+        const projectListEl = document.getElementById('project-list');
+        const saveProjectBtn = document.getElementById('save-project');
+
+        // 監聽專案資料 (實時更新)
+        const q = query(collection(db, "projects"), orderBy("createdAt", "desc"));
+        onSnapshot(q, (snapshot) => {
+            projectListEl.innerHTML = '';
+            if (snapshot.empty) {
+                projectListEl.innerHTML = '<div class="p-8 text-center text-gray-400 col-span-full">目前尚無專案資料</div>';
+                return;
+            }
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                const card = `
+                    <div class="bg-white p-6 rounded-lg shadow hover:shadow-md transition border-l-4 border-blue-500">
+                        <div class="flex justify-between items-start mb-4">
+                            <h4 class="font-bold text-lg text-slate-700">${data.name}</h4>
+                            <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded">執行中</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-2"><i class="far fa-user mr-2"></i>業主：${data.client}</p>
+                        <p class="text-sm text-gray-500 mb-4"><i class="fas fa-hand-holding-usd mr-2"></i>預算：NT$ ${Number(data.budget).toLocaleString()} 萬</p>
+                        <div class="flex space-x-2">
+                            <button class="flex-1 text-xs bg-gray-100 py-2 rounded hover:bg-gray-200">查看詳情</button>
+                            <button class="flex-1 text-xs bg-gray-100 py-2 rounded hover:bg-gray-200 text-blue-600">編輯</button>
+                        </div>
+                    </div>
+                `;
+                projectListEl.innerHTML += card;
+            });
+        });
+
+        // 新增專案到 Firebase
+        saveProjectBtn.addEventListener('click', async () => {
+            const name = document.getElementById('form-name').value;
+            const client = document.getElementById('form-client').value;
+            const budget = document.getElementById('form-budget').value;
+
+            if (!name || !client) return alert('請填寫完整資訊');
+
+            try {
+                await addDoc(collection(db, "projects"), {
+                    name,
+                    client,
+                    budget,
+                    createdAt: serverTimestamp()
+                });
+                closeModal('project');
+                // 清空表單
+                document.getElementById('form-name').value = '';
+                document.getElementById('form-client').value = '';
+                document.getElementById('form-budget').value = '';
+            } catch (e) {
+                console.error("Error adding document: ", e);
+                alert("存檔失敗，請檢查 Firebase 規則設定。");
+            }
+        });
+
+    </script>
+</body>
+</html>
